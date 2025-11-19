@@ -1,9 +1,9 @@
-import './App.css';
 import MiLista from '../lista/MiLista';
 import Footer from '../footer/Footer';
 import Header from '../header/Header';
 import React, { useState } from 'react';
 import Form from './Form';
+import Fondo from '../../images/fondo.jpg'
 
 function App() {
 
@@ -58,20 +58,21 @@ function App() {
 
     console.log("Nueva incidencia", nueva_incidencia);
 
-    // ✔ Actualización CORRECTA del estado
+  
     setIncidencias([...incidencias, nueva_incidencia]);
   };
 
   return (
     <>
       <Header />
-      <h2>Mi Aplicación</h2>
-      <div className="App">
-        <main>
+      <h2 className='mb-4 text-center'>Mi Aplicación</h2>
+      <div className="container-fluid mt-4 row" style={{backgroundImage: `url(${Fondo})`, 
+      backgroundSize: "cover", backgroundRepeat: "no-repeat"}}>
+        <main className='col-md-6'>
           <p>Este es mi contenido de la App</p>
           <MiLista incidencias={incidencias} />
         </main>
-        <aside>
+        <aside className='col-md-6'>
           <Form agregarIncidencia={agregarIncidencia} />
         </aside>
       </div>

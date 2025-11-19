@@ -1,30 +1,23 @@
 import React, { useState } from "react";
+import './MiLista.css';
 
 function MiLista (props) {
 
-    return(
-        <div ClassName='lista'>
-            <ul>
-                {
-                    props.incidencias.map((i)=> (
-                        <li>
-                            
-                            <strong>ID incidencia:</strong> {i.id_incidencias}<br></br>
-                            <strong>Titulo: </strong>{i.titulo}<br></br>
-                           <strong>Descripcion: </strong>{i.descripcion}<br></br>
-                            <strong>Categoria: </strong>{i.categoria}<br></br>
-                            <strong>Nivel de urgencia: </strong>{i.nivel_urgencia}<br></br>
-                            <strong>Fecha de registro: </strong>{i.fecha_registro}<br></br>
-                            <strong>Estado: </strong>{i.estado}<br></br>
-                            <strong>Ubicacion: </strong>{i.ubicacion}<br></br>
-                            
-                        </li>
-                        
-                    ))
+    return (
+  <div className="container mt-3">
+    {props.incidencias.map((i) => (
 
-                }
-            </ul>
+        <div key={i.id_incidencia} className="mb-4 pb-2 border-bottom">
+          <li className="text-titulopersonalizado"><strong>Título: </strong>{i.titulo}<br /></li>
+          <li className="mb-0 text-muted"><strong>Descripción: </strong>{i.descripcion}<br /></li>
+          <li className="mb-0"><strong>Usuario: </strong>{i.usuario}<br /></li>
+          <li className="mb-0"><strong>Urgencia: </strong>{i.nivel_urgencia}<br /></li>
+          <li className="mb-0"><strong>Ubicación: </strong>{i.ubicacion}<br /><br /><br /></li>
         </div>
-    );
+      
+    ))}
+  </div>
+);
+
 }
 export default MiLista;

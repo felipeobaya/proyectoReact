@@ -18,18 +18,30 @@ function Form(props) {
     };
 
     return (
-        <div>
-            <h2>Registrar incidencias</h2>
+        <div className="card p-4">
+            <h2 className="card-title mb-4 text-center">Registrar incidencia:</h2>
             <form onSubmit={envioFormulario}>
-
-                <div className="elemento-form">
-                    <label>Titulo: </label>
-                    <input type="text" name="titulo" required />
+                <div>
+                    <label className="mb-3 form-label">Título incidencia</label>
+                    <input
+                        className="mb-3 form-control"
+                        type="text"
+                        name="titulo"
+                        placeholder="Introduce el título"
+                        required
+                    />
+                    <br />
                 </div>
 
-                <div className="elemento-form">
-                    <label>Id_usuario: </label>
-                    <input type="text" name="usuario" required />
+                <div>
+                    <label className="mb-3 form-label">Usuario</label>
+                    <input
+                        className="mb-3 form-control"
+                        type="text"
+                        name="usuario"
+                        required
+                    />
+                    <br />
                 </div>
 
                 <div className="elemento-form">
@@ -64,10 +76,9 @@ function Form(props) {
                     <input type="text" name="ubicacion" required />
                 </div>
 
-                <button type="submit" className="elemento-form-button">
+                <button type="submit" className="btn btn-outline-dark mx-auto d-grid">
                     Registrar
                 </button>
-
             </form>
         </div>
     );

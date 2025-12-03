@@ -6,10 +6,10 @@ function Form(props) {
     const envioFormulario = (event) => {
         event.preventDefault();
         const form = event.target;
-
+        console.log("ejecuta envioFormulario")
         props.agregarIncidencia(
             form.titulo.value,
-            form.usuario.value,
+            form.email.value,
             form.descripcion.value,
             form.categoria.value,
             form.nivel.value,
@@ -34,11 +34,11 @@ function Form(props) {
                 </div>
 
                 <div>
-                    <label className="mb-3 form-label">Usuario</label>
+                    <label className="mb-3 form-label">Email</label>
                     <input
                         className="mb-3 form-control"
-                        type="text"
-                        name="usuario"
+                        type="email"
+                        name="email"
                         required
                     />
                     <br />

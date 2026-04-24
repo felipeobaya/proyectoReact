@@ -6,7 +6,7 @@
         "id": 1,
         "nombre": "Ana",
         "email": "ana.lopez@educastur.org",
-        "password": "$2y$10$paOaxwKhEBC4W/cVeG85puc9W/hoMlzquXQ/6hrMD6VdqIc/mEToq",
+        "password": "$2y$10$hXdWHFopryi/sXZfrhyFi.dlKttxAaCwPyxMRioKnXHzMPUHWw8XO", 
         "rol": {
           "id": 1,
           "nombre_rol": "comun",
@@ -29,7 +29,7 @@
         "id": 2,
         "nombre": "Carlos",
         "email": "carlos.perez@educastur.org",
-        "password": "$2y$10$L2gyx2oL8Gk6gYVukI.v2.63s7/jRtQQZNS4dq3QYPLfVj8zUVXI2",
+        "password": "$2y$10$Wa97/9fPXo.cJ0dmoYftbeEAct8vjP7pyWPis1r77wMxAyyhMkptO",
         "rol": {
           "id": 1,
           "nombre_rol": "comun",

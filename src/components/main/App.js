@@ -5,6 +5,9 @@ import React, { useState, useEffect } from 'react';
 import Form from './Form';
 import Login from '../Login/Login.js';
 import Fondo from '../../images/fondo.jpg';
+import { Routes, Route } from "react-router-dom"; 
+import Menu from '../../Menu.js';
+import GestionUsuarios from '../GestionUsuarios.js';
 
 function App() {
 
@@ -40,7 +43,6 @@ function App() {
       }
     };
 
-    // 🔹 Recuperar sesión guardada
     const sesionGuardada = localStorage.getItem('usuarioLogueado');
     if (sesionGuardada) {
       setUsuarioLogueado(JSON.parse(sesionGuardada));
@@ -53,39 +55,47 @@ function App() {
 
   const onLogin = async (email, password) => {
     try {
-      const response = await fetch(LOGIN_API_URL, {
-        method: 'POST',
+      const respuesta = await fetch(LOGIN_API_URL, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          email,
-          password
-        })
+        body: JSON.stringify({ email, password })
       });
 
-      if (response.ok) {
-        const userData = await response.json();
+      const data = await respuesta.json();
 
-        setUsuarioLogueado(userData.user);
-
-        localStorage.setItem(
-          'usuarioLogueado',
-          JSON.stringify(userData.user)
-        );
-
-        localStorage.setItem(
-          'token',
-          userData.accessToken
-        );
-
-      } else {
-        alert('Email o contraseña incorrectos');
+      if (!respuesta.ok) {
+        console.error("Error del servidor:", data);
+        alert(`Error ${respuesta.status}: ${data.message || "Email o contraseña incorrectos"}`);
+        return;
       }
 
+      const token = data.accessToken || data.token;
+      const usuario = data.user || data;
+
+      if (!token) {
+        alert("El servidor no devolvió un token válido");
+        return;
+      }
+
+      setUsuarioLogueado(usuario);
+      localStorage.setItem("usuarioLogueado", JSON.stringify(usuario));
+      localStorage.setItem("token", token);
+
+      const cabeceras = { "Authorization": `Bearer ${token}` };
+
+      const [resInc, resUsu] = await Promise.all([
+        fetch(INCIDENCIA_API_URL, { headers: cabeceras }),
+        fetch(USUARIO_API_URL, { headers: cabeceras })
+      ]);
+
+      if (resInc.ok) setIncidencias(await resInc.json());
+      if (resUsu.ok) setUsuarios(await resUsu.json());
+
     } catch (e) {
-      console.error("Error login:", e);
-      alert("Servidor apagado");
+      console.error("Error crítico en login:", e);
+      alert("Error de conexión con el servidor");
     }
   };
 
@@ -149,52 +159,42 @@ function App() {
   };
 
   return (
-    <>
+    <div className='card' style={{ backgroundImage: `url(${Fondo})`, backgroundSize: "cover", backgroundRepeat: "no-repeat", minHeight: "100vh" }}>
       <Header />
-
-      <div
-        className="container-fluid mt-4"
-        style={{
-          backgroundImage: `url(${Fondo})`,
-          backgroundSize: "cover",
-          minHeight: "100vh"
-        }}
-      >
-        <h2 className='text-center py-3'>Mi Aplicación</h2>
-
-        {!usuarioLogueado ? (
-          <div className="row justify-content-center">
-            <aside className="col-md-4">
-              <Login onLogin={onLogin} />
-            </aside>
-          </div>
-        ) : (
+      
+      {usuarioLogueado === null ? (
+        <Login onLogin={onLogin} />
+      ) : (
+        <div className="container-fluid">
           <div className="row">
-            <main className='col-md-7'>
-              <div className="d-flex justify-content-between align-items-center mb-3 bg-secondary text-white p-3 rounded-4 shadow-sm">
-                <span className="fw-semibold">
-                  Bienvenido, <strong>{usuarioLogueado.nombre}</strong>
-                </span>
-                <button
-                  className="btn btn-light btn-sm fw-bold rounded-pill px-3"
-                  onClick={onLogout}
-                >
-                  Cerrar sesión
-                </button>
-              </div>
-
-              <MiLista incidencias={incidencias} />
-            </main>
-
-            <aside className='col-md-5'>
-              <Form agregarIncidencia={agregarIncidencia} />
-            </aside>
+            <div className="col-7">
+              <button 
+                className="btn btn-danger btn-sm mt-2 fw-bold rounded-pill px-3 shadow-sm" 
+                onClick={() => {
+                  localStorage.removeItem("usuarioLogueado");
+                  setUsuarioLogueado(null);
+                }}
+              >
+                Cerrar sesión
+              </button>
+            </div>
           </div>
-        )}
-      </div>
+
+          <div className="mt-4">
+            <Routes>
+              <Route path="/" element={<p className="text-center fw-bold text-muted py-5 fs-4">Pantalla de inicio</p>} />
+              <Route path="/Verincidencias" element={<MiLista incidencias={incidencias} />} />
+              <Route path="/Registrarincidencias" element={<Form agregarIncidencia={agregarIncidencia} />} />
+              <Route path="/Gestionusuarios" element={<GestionUsuarios usuarios={usuarios} />} />
+            </Routes>
+          </div>
+
+          <Menu usuarioLogueado={usuarioLogueado}></Menu>
+        </div>
+      )}
 
       <Footer />
-    </>
+    </div>
   );
 }
 
